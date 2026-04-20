@@ -1,4 +1,4 @@
-import { runMode } from './lib/llm.mjs';
+import { runMode, extractMetadata } from './lib/llm.mjs';
 import { saveReport } from './lib/save-report.mjs';
 import { existsSync } from 'fs';
 
@@ -62,35 +62,65 @@ Example:
 const modePath = modeMap[mode];
 
 if (!existsSync(modePath)) {
-  console.error(`Mode file not found: ${modePath}`);
+  console.error('Mode file not found: ' + modePath);
   process.exit(1);
 }
 
 if (!input) {
-  console.error(`Please provide input. Example: node career.mjs ${mode} "your text here"`);
+  console.error('Please provide input. Example: node career.mjs ' + mode + ' "your text here"');
   process.exit(1);
 }
 
-console.log(`\nRunning mode: ${mode}\nThinking...\n`);
+function extractFromUrl(url) {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace('www.', '').split('.')[0];
+    const pathParts = u.pathname.split('/').filter(Boolean);
+    const lastPart = pathParts[pathParts.length - 1] || '';
+    const role = lastPart.replace(/-/g, ' ').replace(/\d+/g, '').trim();
+    return { company: host, role };
+  } catch {
+    return null;
+  }
+}
+
+function extractFromText(text) {
+  // Match "[Role] at [Company]" pattern
+  const atMatch = text.match(/^([A-Za-z\s\/]+)\s+at\s+([A-Za-z\s]+?)[\.\,]/);
+  if (atMatch) {
+    return { role: atMatch[1].trim(), company: atMatch[2].trim() };
+  }
+  return null;
+}
+
+console.log('\nRunning mode: ' + mode + '\nThinking...\n');
 
 try {
   const result = await runMode(modePath, input, extraFiles);
   console.log(result);
 
-  // Auto-save report for evaluate mode
   if (mode === 'evaluate') {
-    const companyMatch = result.match(/\*\*Company:\*\*\s*(.+)/i) || 
-                         result.match(/Company\s*\|\s*(.+)/i);
-    const roleMatch = result.match(/\*\*Role:\*\*\s*(.+)/i) || 
-                      result.match(/Role\s*\|\s*(.+)/i);
-    
-    const company = companyMatch?.[1]?.trim() || 'unknown-company';
-    const role = roleMatch?.[1]?.trim() || 'unknown-role';
-    
-    saveReport(company, role, result);
+    const isUrl = input.startsWith('http');
+
+    // Try cheap local extraction first
+    let localExtract = isUrl ? extractFromUrl(input) : extractFromText(input);
+
+    console.log('\nExtracting metadata...');
+    const meta = await extractMetadata(result, input);
+
+    // Prefer local extract for company/role, fall back to AI metadata
+    const company = localExtract?.company || meta?.company || 'unknown-company';
+    const role = localExtract?.role || meta?.role || 'unknown-role';
+    const score = meta?.score || '—';
+
+    console.log('Company: ' + company);
+    console.log('Role: ' + role);
+    console.log('Score: ' + score);
+
+    saveReport(company, role, score, result);
   }
 
 } catch (err) {
-  console.error('Error connecting to LM Studio:', err.message);
+  console.error('Error connecting to LM Studio: ' + err.message);
   console.error('Make sure LM Studio is running with the local server enabled on port 1234.');
 }
