@@ -1,18 +1,20 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: oferta — Evaluación Completa A-G
 
-Cuando el candidato pega una oferta (texto o URL), entregar SIEMPRE los 7 bloques (A-F evaluation + G legitimacy):
+Cuando el candidato pega una oferta (texto o URL), entregar ALWAYS los 7 bloques (A-F evaluation + G legitimacy):
 
-## Paso 0 — Detección de Arquetipo
+## Step 0 — Archetype Detection
 
 Clasificar la oferta en uno de los 6 arquetipos (ver `_shared.md`). Si es híbrido, indicar los 2 más cercanos. Esto determina:
 - Qué proof points priorizar en bloque B
 - Cómo reescribir el summary en bloque E
 - Qué historias STAR preparar en bloque F
 
-## Bloque A — Resumen del Rol
+## Block A — Role Summary
 
 Tabla con:
-- Arquetipo detectado
+- Detected archetype
 - Domain (platform/agentic/LLMOps/ML/enterprise)
 - Function (build/consult/manage/deploy)
 - Seniority
@@ -20,7 +22,7 @@ Tabla con:
 - Team size (si se menciona)
 - TL;DR en 1 frase
 
-## Bloque B — Match con CV
+## Block B — CV Match
 
 Lee `cv.md`. Crea tabla con cada requisito del JD mapeado a líneas exactas del CV.
 
@@ -32,19 +34,19 @@ Lee `cv.md`. Crea tabla con cada requisito del JD mapeado a líneas exactas del 
 - Si Agentic → priorizar multi-agent, HITL, orchestration
 - Si Transformation → priorizar change management, adoption, scaling
 
-Sección de **gaps** con estrategia de mitigación para cada uno. Para cada gap:
+Section de **gaps** con estrategia de mitigación para cada uno. Para cada gap:
 1. ¿Es un hard blocker o un nice-to-have?
 2. ¿Puede el candidato demostrar experiencia adyacente?
 3. ¿Hay un proyecto portfolio que cubra este gap?
 4. Plan de mitigación concreto (frase para cover letter, proyecto rápido, etc.)
 
-## Bloque C — Nivel y Estrategia
+## Block C — Level and Strategy
 
 1. **Nivel detectado** en el JD vs **nivel natural del candidato para ese arquetipo**
 2. **Plan "vender senior sin mentir"**: frases específicas adaptadas al arquetipo, logros concretos a destacar, cómo posicionar la experiencia de founder como ventaja
 3. **Plan "si me downlevelan"**: aceptar si comp es justa, negociar review a 6 meses, criterios de promoción claros
 
-## Bloque D — Comp y Demanda
+## Block D — Compensation and Demand
 
 Usar WebSearch para:
 - Salarios actuales del rol (Glassdoor, Levels.fyi, Blind)
@@ -53,20 +55,20 @@ Usar WebSearch para:
 
 Tabla con datos y fuentes citadas. Si no hay datos, decirlo en vez de inventar.
 
-## Bloque E — Plan de Personalización
+## Block E — Personalization Plan
 
-| # | Sección | Estado actual | Cambio propuesto | Por qué |
+| # | Section | Current state | Proposed change | Why |
 |---|---------|---------------|------------------|---------|
 | 1 | Summary | ... | ... | ... |
 | ... | ... | ... | ... | ... |
 
 Top 5 cambios al CV + Top 5 cambios a LinkedIn para maximizar match.
 
-## Bloque F — Plan de Entrevistas
+## Block F — Interview Plan
 
 6-10 historias STAR+R mapeadas a requisitos del JD (STAR + **Reflection**):
 
-| # | Requisito del JD | Historia STAR+R | S | T | A | R | Reflection |
+| # | JD Requirement | STAR Story+R | S | T | A | R | Reflection |
 |---|-----------------|-----------------|---|---|---|---|------------|
 
 The **Reflection** column captures what was learned or what would be done differently. This signals seniority — junior candidates describe what happened, senior candidates extract lessons.
@@ -85,7 +87,7 @@ Incluir también:
 - 1 case study recomendado (cuál de sus proyectos presentar y cómo)
 - Preguntas red-flag y cómo responderlas (ej: "¿por qué vendiste tu empresa?", "¿tienes equipo de reports?")
 
-## Bloque G — Posting Legitimacy
+## Block G — Posting Legitimacy
 
 Analyze the job posting for signals that indicate whether this is a real, active opening. This helps the user prioritize their effort on opportunities most likely to result in a hiring process.
 
@@ -93,7 +95,7 @@ Analyze the job posting for signals that indicate whether this is a real, active
 
 ### Signals to analyze (in order):
 
-**1. Posting Freshness** (from Playwright snapshot, already captured in Paso 0):
+**1. Posting Freshness** (from Playwright snapshot, already captured in Step 0):
 - Date posted or "X days ago" -- extract from page
 - Apply button state (active / closed / missing / redirects to generic page)
 - If URL redirected to generic careers page, note it
@@ -144,9 +146,9 @@ Analyze the job posting for signals that indicate whether this is a real, active
 
 ## Post-evaluación
 
-**SIEMPRE** después de generar los bloques A-G:
+**ALWAYS** después de generar los bloques A-G:
 
-### 1. Guardar report .md
+### 1. Save report .md
 
 Guardar evaluación completa en `reports/{###}-{company-slug}-{YYYY-MM-DD}.md`.
 
@@ -167,22 +169,22 @@ Guardar evaluación completa en `reports/{###}-{company-slug}-{YYYY-MM-DD}.md`.
 
 ---
 
-## A) Resumen del Rol
+## A) Role Summary
 (contenido completo del bloque A)
 
-## B) Match con CV
+## B) CV Match
 (contenido completo del bloque B)
 
-## C) Nivel y Estrategia
+## C) Level and Strategy
 (contenido completo del bloque C)
 
-## D) Comp y Demanda
+## D) Compensation and Demand
 (contenido completo del bloque D)
 
-## E) Plan de Personalización
+## E) Personalization Plan
 (contenido completo del bloque E)
 
-## F) Plan de Entrevistas
+## F) Interview Plan
 (contenido completo del bloque F)
 
 ## G) Posting Legitimacy
@@ -193,13 +195,13 @@ Guardar evaluación completa en `reports/{###}-{company-slug}-{YYYY-MM-DD}.md`.
 
 ---
 
-## Keywords extraídas
+## Extracted keywords
 (lista de 15-20 keywords del JD para ATS optimization)
 ```
 
-### 2. Registrar en tracker
+### 2. Register in tracker
 
-**SIEMPRE** registrar en `data/applications.md`:
+**ALWAYS** registrar en `data/applications.md`:
 - Siguiente número secuencial
 - Fecha actual
 - Empresa

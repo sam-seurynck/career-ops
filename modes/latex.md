@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Mode: latex — LaTeX/Overleaf CV Export
 
 Export a tailored, ATS-optimized CV as a `.tex` file and compile it to PDF via `pdflatex`.

@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: contacto -- LinkedIn Power Move
 
 1. **Identificar targets** via WebSearch:

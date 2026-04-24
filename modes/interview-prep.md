@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Mode: interview-prep — Company-Specific Interview Intelligence
 
 When the user asks to prep for an interview at a specific company+role, or when an evaluation scores 4.0+ and the user updates status to `Interview`, run this mode.

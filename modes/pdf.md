@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: pdf — Generación de PDF ATS-Optimizado
 
 ## Pipeline completo

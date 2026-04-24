@@ -1,5 +1,7 @@
 import { runMode, extractMetadata } from './lib/llm.mjs';
 import { saveReport } from './lib/save-report.mjs';
+import { fetchJobContent } from './lib/fetch-job.mjs';
+import { runBatch } from './lib/batch.mjs';
 import { existsSync } from 'fs';
 
 const args = process.argv.slice(2);
@@ -39,11 +41,11 @@ Usage: node career.mjs <mode> <input>
 
 Modes:
   evaluate  — Evaluate a job description (paste text or URL)
+  batch     — Process all pending URLs in data/pipeline.md
   pdf       — Generate ATS-optimized CV
   pipeline  — Process pending URLs from inbox
   tracker   — View application status
   scan      — Scan portals for new offers
-  batch     — Batch process multiple offers
   deep      — Deep company research
   contact   — LinkedIn outreach message
   apply     — Live application assistant
@@ -55,7 +57,14 @@ Modes:
 
 Example:
   node career.mjs evaluate "Senior Designer at Acme, requires 5 years..."
+  node career.mjs batch
   `);
+  process.exit(0);
+}
+
+// Batch mode — no input needed
+if (mode === 'batch') {
+  await runBatch();
   process.exit(0);
 }
 
@@ -71,21 +80,7 @@ if (!input) {
   process.exit(1);
 }
 
-function extractFromUrl(url) {
-  try {
-    const u = new URL(url);
-    const host = u.hostname.replace('www.', '').split('.')[0];
-    const pathParts = u.pathname.split('/').filter(Boolean);
-    const lastPart = pathParts[pathParts.length - 1] || '';
-    const role = lastPart.replace(/-/g, ' ').replace(/\d+/g, '').trim();
-    return { company: host, role };
-  } catch {
-    return null;
-  }
-}
-
 function extractFromText(text) {
-  // Match "[Role] at [Company]" pattern
   const atMatch = text.match(/^([A-Za-z\s\/]+)\s+at\s+([A-Za-z\s]+?)[\.\,]/);
   if (atMatch) {
     return { role: atMatch[1].trim(), company: atMatch[2].trim() };
@@ -96,19 +91,27 @@ function extractFromText(text) {
 console.log('\nRunning mode: ' + mode + '\nThinking...\n');
 
 try {
-  const result = await runMode(modePath, input, extraFiles);
+  const isUrl = input.startsWith('http');
+  let jobContent = input;
+
+  if (isUrl && mode === 'evaluate') {
+    try {
+      jobContent = await fetchJobContent(input);
+      console.log('Job content fetched (' + jobContent.length + ' chars)\n');
+    } catch (err) {
+      console.log('Could not fetch URL, using URL as-is: ' + err.message);
+    }
+  }
+
+  const result = await runMode(modePath, jobContent, extraFiles);
   console.log(result);
 
   if (mode === 'evaluate') {
-    const isUrl = input.startsWith('http');
-
-    // Try cheap local extraction first
-    let localExtract = isUrl ? extractFromUrl(input) : extractFromText(input);
+    const localExtract = isUrl ? null : extractFromText(input);
 
     console.log('\nExtracting metadata...');
-    const meta = await extractMetadata(result, input);
+    const meta = await extractMetadata(result, jobContent);
 
-    // Prefer local extract for company/role, fall back to AI metadata
     const company = localExtract?.company || meta?.company || 'unknown-company';
     const role = localExtract?.role || meta?.role || 'unknown-role';
     const score = meta?.score || '—';
@@ -121,6 +124,6 @@ try {
   }
 
 } catch (err) {
-  console.error('Error connecting to LM Studio: ' + err.message);
+  console.error('Error: ' + err.message);
   console.error('Make sure LM Studio is running with the local server enabled on port 1234.');
 }

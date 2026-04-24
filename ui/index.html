@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Ops</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #0f0f0f; color: #e0e0e0; min-height: 100vh; }
+    header { padding: 24px 32px; border-bottom: 1px solid #222; display: flex; align-items: center; gap: 16px; }
+    header h1 { font-size: 18px; font-weight: normal; letter-spacing: 0.1em; }
+    main { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 73px); }
+    aside { border-right: 1px solid #222; padding: 24px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
+    .output-panel { padding: 24px; overflow-y: auto; }
+    label { font-size: 11px; letter-spacing: 0.1em; color: #666; display: block; margin-bottom: 8px; }
+    textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #e0e0e0; padding: 12px; font-family: monospace; font-size: 13px; resize: vertical; border-radius: 4px; }
+    textarea:focus { outline: none; border-color: #555; }
+    select { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #e0e0e0; padding: 10px 12px; font-family: monospace; font-size: 13px; border-radius: 4px; }
+    button { width: 100%; padding: 12px; background: #e0e0e0; color: #0f0f0f; border: none; font-family: monospace; font-size: 13px; cursor: pointer; border-radius: 4px; letter-spacing: 0.05em; }
+    button:hover { background: #fff; }
+    button:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .btn-secondary { background: #1a1a1a; color: #e0e0e0; border: 1px solid #333; }
+    .btn-secondary:hover { background: #222; }
+    .status { font-size: 12px; color: #666; min-height: 20px; }
+    .status.active { color: #88cc88; }
+    .status.error { color: #cc4444; }
+    .output { font-size: 13px; line-height: 1.6; }
+    .output h1, .output h2 { color: #aaa; font-size: 13px; margin: 20px 0 8px; border-bottom: 1px solid #222; padding-bottom: 4px; font-weight: normal; letter-spacing: 0.05em; }
+    .output h3 { color: #888; font-size: 13px; margin: 16px 0 6px; font-weight: normal; }
+    .output p { margin-bottom: 10px; }
+    .output ul, .output ol { margin: 8px 0 10px 20px; }
+    .output li { margin-bottom: 4px; }
+    .output table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+    .output th { text-align: left; padding: 8px 12px; border-bottom: 1px solid #333; color: #666; font-weight: normal; }
+    .output td { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; vertical-align: top; }
+    .output tr:hover td { background: #1a1a1a; }
+    .output strong { color: #fff; }
+    .output code { background: #1a1a1a; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+    .output pre { background: #1a1a1a; padding: 12px; border-radius: 4px; overflow-x: auto; margin: 10px 0; }
+    .output blockquote { border-left: 2px solid #333; padding-left: 12px; color: #888; margin: 10px 0; }
+    .meta-bar { background: #1a1a1a; border: 1px solid #333; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 12px; display: flex; gap: 24px; }
+    .meta-bar span { color: #666; }
+    .meta-bar strong { color: #e0e0e0; }
+    .tabs { display: flex; gap: 1px; margin-bottom: 24px; }
+    .tab { flex: 1; padding: 8px; background: #1a1a1a; border: 1px solid #333; color: #666; font-family: monospace; font-size: 12px; cursor: pointer; text-align: center; }
+    .tab.active { background: #222; color: #e0e0e0; border-color: #555; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 8px; border-bottom: 1px solid #333; color: #666; font-weight: normal; }
+    td { padding: 8px; border-bottom: 1px solid #1a1a1a; vertical-align: top; }
+    tr:hover td { background: #1a1a1a; }
+    .score { color: #88cc88; }
+    .divider { border: none; border-top: 1px solid #222; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>CAREER OPS</h1>
+  <span style="color:#444">— powered by LM Studio</span>
+</header>
+
+<main>
+  <aside>
+    <div>
+      <label>MODE</label>
+      <select id="mode">
+        <option value="evaluate">Evaluate job</option>
+        <option value="deep">Deep research</option>
+        <option value="contact">LinkedIn outreach</option>
+        <option value="apply">Application assistant</option>
+        <option value="training">Evaluate course</option>
+        <option value="project">Evaluate project</option>
+        <option value="patterns">Rejection patterns</option>
+        <option value="followup">Follow-up tracker</option>
+        <option value="compare">Compare offers</option>
+      </select>
+    </div>
+
+    <div>
+      <label>JOB URL OR DESCRIPTION</label>
+      <textarea id="input" rows="8" placeholder="Paste a job URL or job description here..."></textarea>
+    </div>
+
+    <button id="runBtn" onclick="runEvaluate()">RUN</button>
+
+    <hr class="divider">
+
+    <div>
+      <label>BATCH PROCESSING</label>
+      <textarea id="pipeline" rows="6" placeholder="Add one URL per line..."></textarea>
+      <br>
+      <button class="btn-secondary" onclick="savePipeline()" style="margin-bottom:8px">SAVE PIPELINE</button>
+      <button class="btn-secondary" onclick="runBatch()">RUN BATCH</button>
+    </div>
+
+    <div class="status" id="status">Ready</div>
+  </aside>
+
+  <div class="output-panel">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('output')">OUTPUT</div>
+      <div class="tab" onclick="showTab('tracker')">TRACKER</div>
+    </div>
+
+    <div class="tab-content active" id="tab-output">
+      <div class="meta-bar" id="metaBar" style="display:none">
+        <div><span>Company </span><strong id="metaCompany">—</strong></div>
+        <div><span>Role </span><strong id="metaRole">—</strong></div>
+        <div><span>Score </span><strong class="score" id="metaScore">—</strong></div>
+        <div><span>Report </span><strong id="metaFile">—</strong></div>
+      </div>
+      <div class="output" id="output">Results will appear here...</div>
+    </div>
+
+    <div class="tab-content" id="tab-tracker">
+      <div id="trackerContent" style="overflow-x:auto"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', ['output','tracker'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'tracker') loadTracker();
+}
+
+function setStatus(msg, type = '') {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status ' + type;
+}
+
+async function runEvaluate() {
+  const input = document.getElementById('input').value.trim();
+  const mode = document.getElementById('mode').value;
+  if (!input) { setStatus('Please enter a URL or job description', 'error'); return; }
+
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  document.getElementById('output').innerHTML = '<span style="color:#444">Thinking...</span>';
+  document.getElementById('metaBar').style.display = 'none';
+  setStatus('Starting...', 'active');
+
+  const url = '/api/evaluate?input=' + encodeURIComponent(input) + '&mode=' + mode;
+  const es = new EventSource(url);
+
+  es.onmessage = (e) => {
+    const { type, data } = JSON.parse(e.data);
+    if (type === 'status') setStatus(data, 'active');
+    if (type === 'result') {
+      document.getElementById('output').innerHTML = marked.parse(data);
+      setStatus('Saving...', 'active');
+    }
+    if (type === 'meta') {
+      document.getElementById('metaBar').style.display = 'flex';
+      document.getElementById('metaCompany').textContent = data.company;
+      document.getElementById('metaRole').textContent = data.role;
+      document.getElementById('metaScore').textContent = data.score + '/5';
+      document.getElementById('metaFile').textContent = data.filename;
+    }
+    if (type === 'error') setStatus('Error: ' + data, 'error');
+  };
+
+  es.onerror = () => {
+    es.close();
+    btn.disabled = false;
+    setStatus('Done', '');
+  };
+}
+
+async function loadTracker() {
+  const res = await fetch('/api/tracker');
+  const { content } = await res.json();
+  const lines = content.split('\n').filter(l => l.startsWith('|'));
+  if (lines.length < 2) {
+    document.getElementById('trackerContent').innerHTML = '<p style="color:#666;padding:16px">No applications yet.</p>';
+    return;
+  }
+  const headers = lines[0].split('|').filter(h => h.trim());
+  const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim()));
+  let html = '<table><thead><tr>' + headers.map(h => '<th>' + h.trim() + '</th>').join('') + '</tr></thead><tbody>';
+  rows.forEach(row => {
+    html += '<tr>' + row.map(c => '<td>' + c.trim() + '</td>').join('') + '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('trackerContent').innerHTML = html;
+}
+
+async function savePipeline() {
+  const content = document.getElementById('pipeline').value;
+  await fetch('/api/pipeline', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content })
+  });
+  setStatus('Pipeline saved', 'active');
+}
+
+async function runBatch() {
+  setStatus('Starting batch...', 'active');
+  const es = new EventSource('/api/batch');
+  es.onmessage = (e) => {
+    const { type, data } = JSON.parse(e.data);
+    if (type === 'status') setStatus(data, 'active');
+    if (type === 'error') setStatus('Error: ' + data, 'error');
+  };
+  es.onerror = () => {
+    es.close();
+    setStatus('Batch complete', '');
+    loadTracker();
+  };
+}
+
+fetch('/api/pipeline').then(r => r.json()).then(({ content }) => {
+  document.getElementById('pipeline').value = content;
+});
+</script>
+
+</body>
+</html>

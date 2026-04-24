@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: ofertas — Comparación Multi-Oferta
 
 Scoring matrix de 10 dimensiones ponderadas:

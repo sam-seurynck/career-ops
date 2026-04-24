@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Mode: followup -- Follow-up Cadence Tracker
 
 ## Purpose

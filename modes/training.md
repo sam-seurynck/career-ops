@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: training — Evaluación de Formación
 
 Para cada curso/cert que el candidato pregunte, evaluar 6 dimensiones:

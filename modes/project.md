@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: project — Evaluación de Proyecto Portfolio
 
 Scoring 6 dimensiones (1-5):

@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: tracker — Tracker de Aplicaciones
 
 Lee y muestra `data/applications.md`.

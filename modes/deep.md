@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Modo: deep — Deep Research Prompt
 
 Genera un prompt estructurado para Perplexity/Claude/ChatGPT con 6 ejes:

@@ -1,3 +1,5 @@
+IMPORTANT: Always respond in English only. Do not use Spanish or any other language.
+
 # Mode: patterns -- Rejection Pattern Detector
 
 ## Purpose
